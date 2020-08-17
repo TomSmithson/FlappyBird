@@ -10,10 +10,10 @@ def create_pipes():
     pipes = []
     x = 500
     for i in range(0, 100):
-        top_y = random.randint(0, 100)
-        bottom_y = random.randint(700, 800)
+        top_y = random.randint(-100, 150)
+        bottom_y = random.randint(850, 900)
         pipes.append([x, top_y, bottom_y])
-        x += 200
+        x += 300
     return pipes
 
 pygame.init()
@@ -27,7 +27,8 @@ bird_surface = pygame.image.load("bird.png").convert()
 bird_surface = pygame.transform.scale2x(bird_surface)
 bird_rect = bird_surface.get_rect(center = (100, 400))
 
-pipe_surface = pygame.image.load("pipe.png").convert()
+pipe_surface = pygame.image.load("pipe3.png").convert()
+pipe_surface = pygame.transform.scale2x(pipe_surface)
 
 gravity = 0.20
 bird_movement = 0
