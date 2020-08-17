@@ -36,7 +36,7 @@ pipes = create_pipes()
 i = 0
 
 score = 0
-font = pygame.font.SysFont(None, 20)
+font = pygame.font.SysFont(None, 40)
 
 while True:
     pipe_movement = 0
@@ -50,16 +50,15 @@ while True:
             if event.key == pygame.K_SPACE:
                 bird_movement = 0
                 bird_movement -= 6
-
     screen.blit(bg_surface, (0, 0))
     text_surface = font.render("Score: {}".format(score), False, (0, 0, 0))
-    screen.blit(text_surface, (0, 0))
 
     bird_movement += gravity
     bird_rect.centery += bird_movement
     screen.blit(bird_surface, bird_rect)
 
     pipe_pos = []
+    score = 0
 
     for i in range(0, len(pipes)):
         pipes[i][0] = pipes[i][0] - 2
@@ -71,7 +70,9 @@ while True:
             pipe_pos.append([bottom_pipe, top_pipe])
         if pipes[i][0] < 0:
             del pipe_pos[0]
-  
+        if pipes[i][0] < bird_rect.x:
+            score+=1
+
     if pipe_pos[0][0].x - 59 == bird_rect.x or pipe_pos[0][1].x + 59 == bird_rect.x:
         if (pipe_pos[0][1].y + pipe_pos[0][1].h) - bird_rect.y > 0:
             pygame.quit()
@@ -79,9 +80,8 @@ while True:
         elif (bird_rect.y in range(pipe_pos[0][0].y - 50, pipe_pos[0][0].y + 50)):
             pygame.quit()
             sys.exit()
-        else:
-          score += 1
 
+    screen.blit(text_surface, (0, 0))
 
     pygame.display.update()
     clock.tick(60)
