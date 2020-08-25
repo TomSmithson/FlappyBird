@@ -1,22 +1,9 @@
 import sys, pygame
+import time
 import random
 
-def check_boundaries():
-    if bird_rect.y < -200 or bird_rect.y > 800:
-        return False
-    return True
-
-def create_pipes():
-    pipes = []
-    x = 500
-    for i in range(0, 100):
-        top_y = random.randint(-100, 150)
-        bottom_y = random.randint(850, 900)
-        pipes.append([x, top_y, bottom_y])
-        x += 300
-    return pipes
-
 pygame.init()
+pygame.display.set_caption("Flappy Birds Clone | Tom Smithson")
 screen = pygame.display.set_mode((576, 800))
 clock = pygame.time.Clock()
 
@@ -36,7 +23,22 @@ bird_rect = bird_surface.get_rect(center = (100, 400))
 pipe_surface = pygame.image.load("pipe3.png").convert()
 pipe_surface = pygame.transform.scale2x(pipe_surface)
 
-font = pygame.font.SysFont(None, 40)
+font = pygame.font.SysFont(None, 50)
+
+def check_boundaries():
+    if bird_rect.y < -200 or bird_rect.y > 800:
+        return False
+    return True
+
+def create_pipes():
+    pipes = []
+    x = 500
+    for i in range(0, 100):
+        top_y = random.randint(-100, 150)
+        bottom_y = random.randint(850, 900)
+        pipes.append([x, top_y, bottom_y])
+        x += 300
+    return pipes
 
 
 def game_loop():
@@ -48,6 +50,7 @@ def game_loop():
     while True:
         pipe_movement = 0
         if not check_boundaries():
+            end_screen(score)
             break
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -82,11 +85,9 @@ def game_loop():
 
         if pipe_pos[0][0].x - 59 == bird_rect.x or pipe_pos[0][1].x + 59 == bird_rect.x:
             if (pipe_pos[0][1].y + pipe_pos[0][1].h) - bird_rect.y > 0:
-                pygame.quit()
-                sys.exit()
+                end_screen(score)
             elif (bird_rect.y in range(pipe_pos[0][0].y - 50, pipe_pos[0][0].y + 50)):
-                pygame.quit()
-                sys.exit()
+                end_screen(score)
 
         screen.blit(text_surface, (0, 0))
 
@@ -94,10 +95,13 @@ def game_loop():
         clock.tick(60)
 
 def end_screen(score):
+    print(score)
     screen.blit(endscreen_surface, (0, 0))
+    font = pygame.font.SysFont(None, 80)
     text_surface = font.render("{}".format(score), False, (0, 0, 0))
+    screen.blit(text_surface, (370, 435))
     pygame.display.update()
-    pygame.time.delay(1000)
+    time.sleep(5)
     pygame.quit()
     sys.exit()
 
